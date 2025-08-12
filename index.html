@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For.My.Events - Agence Événementielle</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=Lora:wght@400;500&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* ---------- RESET & BASE STYLES ---------- */
+        :root {
+            --primary: #D97A74;
+            --primary-light: #e8a8a4;
+            --text-dark: #3A2C2B;
+            --text-medium: #5D4E4D;
+            --text-light: #FFFFFF;
+            --bg-light: #F9F4F3;
+            --accent: #C5A572;
+            --border-radius: 12px;
+            --box-shadow: 0 8px 24px rgba(58, 44, 43, 0.08);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-medium);
+            background-color: var(--bg-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            color: var(--text-dark);
+            font-weight: 500;
+            line-height: 1.3;
+        }
+        
+        p {
+            margin-bottom: 1.2rem;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        
+        .section {
+            padding: 100px 0;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent);
+            margin: 20px auto 40px;
+        }
+        
+        .section-subtitle {
+            font-family: 'Lora', serif;
+            font-size: 1.2rem;
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 60px;
+            color: var(--text-medium);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: var(--transition);
+            cursor: pointer;
+            text-align: center;
+            border: none;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--text-light);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--text-dark);
+            transform: translateY(-3px);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: var(--text-light);
+            transform: translateY(-3px);
+            box-shadow: var(--box-shadow);
+        }
+        
+        /* ---------- LOADER ---------- */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-light);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.6s ease-out;
+        }
+        
+        .loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .loader-content {
+            text-align: center;
+            transform: translateY(-50px);
+        }
+        
+        .loader-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(217, 122, 116, 0.2);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1.2s linear infinite;
+            margin: 0 auto 30px;
+        }
+        
+        .loader-logo {
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+        }
+        
+        .loader-message {
+            font-family: 'Lora', serif;
+            color: var(--text-medium);
+            font-size: 1.1rem;
+            max-width: 80%;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* ---------- HEADER ---------- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 24px 0;
+            background-color: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            transition: var(--transition);
+            border-bottom: 1px solid rgba(58, 44, 43, 0.08);
+        }
+        
+        header.scrolled {
+            padding: 16px 0;
+            box-shadow: 0 4px 12px rgba(58, 44, 43, 0.05);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 0.5px;
+        }
+        
+        .logo span {
+            color: var(--accent);
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-menu li {
+            margin-left: 40px;
+        }
+        
+        .nav-menu a {
+            font-weight: 500;
+            position: relative;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+        
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: var(--transition);
+        }
+        
+        .nav-menu a:hover {
+            color: var(--primary);
+        }
+        
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+        
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            width: 28px;
+            height: 20px;
+            position: relative;
+            z-index: 1001;
+        }
+        
+        .hamburger span {
+            display: block;
+            position: absolute;
+            height: 2px;
+            width: 100%;
+            background: var(--text-dark);
+            border-radius: 2px;
+            opacity: 1;
+            left: 0;
+            transform: rotate(0deg);
+            transition: var(--transition);
+        }
+        
+        .hamburger span:nth-child(1) {
+            top: 0;
+            transform-origin: left center;
+        }
+        
+        .hamburger span:nth-child(2) {
+            top: 8px;
+            transform-origin: left center;
+        }
+        
+        .hamburger span:nth-child(3) {
+            top: 16px;
+            transform-origin: left center;
+        }
+        
+        .hamburger.open span:nth-child(1) {
+            transform: rotate(45deg);
+            top: -2px;
+            left: 4px;
+        }
+        
+        .hamburger.open span:nth-child(2) {
+            width: 0%;
+            opacity: 0;
+        }
+        
+        .hamburger.open span:nth-child(3) {
+            transform: rotate(-45deg);
+            top: 18px;
+            left: 4px;
+        }
+        
+        /* ---------- HERO SECTION ---------- */
+        .hero {
+            height: 100vh;
+            min-height: 800px;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(rgba(58, 44, 43, 0.4), rgba(58, 44, 43, 0.4)), 
+                        url('photo3.jpg') no-repeat center center/cover;
+            color: var(--text-light);
+            padding-top: 80px;
+            position: relative;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to top, var(--bg-light), transparent);
+            z-index: 1;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            padding: 0 20px;
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            margin-bottom: 24px;
+            animation: fadeInDown 1s ease;
+            letter-spacing: 0.5px;
+        }
+        
+        .hero-subtitle {
+            font-family: 'Lora', serif;
+            font-size: 1.4rem;
+            margin-bottom: 40px;
+            animation: fadeInUp 1s ease 0.3s both;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+        
+        .hero-btns {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+        
+        /* ---------- SERVICES SECTION ---------- */
+        .services {
+            background-color: var(--bg-light);
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+        
+        .service-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 28px rgba(58, 44, 43, 0.12);
+        }
+        
+        .service-img {
+            height: 240px;
+            overflow: hidden;
+        }
+        
+        .service-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+        
+        .service-card:hover .service-img img {
+            transform: scale(1.08);
+        }
+        
+        .service-content {
+            padding: 32px;
+        }
+        
+        .service-title {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+        
+        .service-desc {
+            color: var(--text-medium);
+            margin-bottom: 24px;
+            font-size: 1rem;
+        }
+        
+        .service-types {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+        
+        .service-type {
+            background-color: var(--primary-light);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .service-btn {
+            width: 100%;
+        }
+        
+        /* ---------- PRODUCTS SECTION ---------- */
+        .products-preview {
+            background-color: white;
+            padding: 100px 0;
+        }
+        
+        .products-highlight {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .product-card {
+            background-color: var(--bg-light);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(58, 44, 43, 0.1);
+        }
+        
+        .product-img {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        
+        .product-card:hover .product-img img {
+            transform: scale(1.05);
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--primary);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .product-content {
+            padding: 20px;
+        }
+        
+        .product-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+        
+        .product-price {
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .product-link {
+            display: inline-block;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .product-link:hover {
+            color: var(--primary);
+        }
+        
+        .product-link i {
+            margin-left: 5px;
+            transition: var(--transition);
+        }
+        
+        .product-link:hover i {
+            transform: translateX(5px);
+        }
+        
+        .products-cta {
+            text-align: center;
+            margin-top: 50px;
+        }
+        
+        /* ---------- ABOUT SECTION ---------- */
+        .about {
+            background-color: white;
+        }
+        
+        .about-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        
+        .about-img {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            height: 100%;
+        }
+        
+        .about-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .about-content {
+            padding: 20px 0;
+        }
+        
+        .about-title {
+            font-size: 2rem;
+            margin-bottom: 24px;
+        }
+        
+        .about-text {
+            color: var(--text-medium);
+            margin-bottom: 24px;
+        }
+        
+        .about-features {
+            list-style: none;
+            margin-top: 32px;
+        }
+        
+        .about-features li {
+            margin-bottom: 16px;
+            position: relative;
+            padding-left: 36px;
+            color: var(--text-medium);
+        }
+        
+        .about-features li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 6px;
+            width: 20px;
+            height: 20px;
+            background-color: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            font-size: 0.7rem;
+            content: '\f00c';
+        }
+        
+        /* ---------- SHOWREEL SECTION ---------- */
+        .showreel {
+            background-color: var(--bg-light);
+            text-align: center;
+        }
+        
+        .video-container {
+            max-width: 800px;
+            margin: 40px auto;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            position: relative;
+            height: 450px;
+        }
+        
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .showreel-btn {
+            margin-top: 50px;
+        }
+        
+        /* ---------- RESERVATION SECTION ---------- */
+        .reservation {
+            background-color: var(--primary);
+            color: var(--text-light);
+        }
+        
+        .reservation .section-title, 
+        .reservation .section-subtitle {
+            color: var(--text-light);
+        }
+        
+        .reservation-form {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 50px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: var(--border-radius);
+            font-family: 'Montserrat', sans-serif;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(217, 122, 116, 0.2);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .form-submit {
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        .form-note {
+            font-size: 0.9rem;
+            margin-top: 24px;
+            color: var(--text-medium);
+            text-align: center;
+            font-style: italic;
+        }
+        
+        /* ---------- FOOTER ---------- */
+        footer {
+            background-color: var(--text-dark);
+            color: var(--text-light);
+            padding: 80px 0 30px;
+        }
+        
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 60px;
+            margin-bottom: 60px;
+        }
+        
+        .footer-col h3 {
+            font-size: 1.4rem;
+            margin-bottom: 24px;
+            position: relative;
+            padding-bottom: 12px;
+            color: white;
+        }
+        
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--accent);
+        }
+        
+        .footer-about p {
+            margin-bottom: 24px;
+            opacity: 0.8;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+            list-style: none;
+            opacity: 0.8;
+            transition: var(--transition);
+        }
+        
+        .footer-links li:hover {
+            opacity: 1;
+        }
+        
+        .footer-links a {
+            transition: var(--transition);
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary-light);
+        }
+        
+        .footer-contact p {
+            margin-bottom: 16px;
+            display: flex;
+            align-items: flex-start;
+            opacity: 0.8;
+        }
+        
+        .footer-contact i {
+            margin-right: 12px;
+            color: var(--accent);
+            margin-top: 4px;
+        }
+        
+        .footer-social {
+            display: flex;
+            gap: 16px;
+            margin-top: 24px;
+        }
+        
+        .footer-social a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            background-color: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            transition: var(--transition);
+            font-size: 1.1rem;
+        }
+        
+        .footer-social a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.6;
+            font-size: 0.9rem;
+        }
+        
+        /* ---------- ANIMATIONS ---------- */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 1024px) {
+            .about-container {
+                gap: 40px;
+            }
+            
+            .section {
+                padding: 80px 0;
+            }
+            
+            .video-container {
+                height: 400px;
+            }
+        }
+        
+        @media (max-width: 900px) {
+            .about-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .about-img {
+                height: 400px;
+            }
+            
+            .hero-title {
+                font-size: 3rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .video-container {
+                height: 350px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+            }
+            
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 280px;
+                height: 100vh;
+                background-color: white;
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: center;
+                padding: 0 40px;
+                transition: right 0.4s ease;
+                box-shadow: -5px 0 20px rgba(0, 0, 0, 0.08);
+            }
+            
+            .nav-menu.active {
+                right: 0;
+            }
+            
+            .nav-menu li {
+                margin: 16px 0;
+            }
+            
+            .hero-btns {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 280px;
+            }
+            
+            .section {
+                padding: 70px 0;
+            }
+            
+            .section-title {
+                font-size: 2.2rem;
+            }
+            
+            .reservation-form {
+                padding: 40px 30px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .video-container {
+                height: 300px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .hero-title {
+                font-size: 2.4rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .services-grid, .products-highlight {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .reservation-form {
+                padding: 30px 20px;
+            }
+            
+            .video-container {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loader -->
+    <div class="loader">
+        <div class="loader-content">
+            <div class="loader-spinner"></div>
+            <div class="loader-logo">For.My.Events</div>
+            <p class="loader-message">Nous préparons avec amour votre expérience événementielle...</p>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header id="header">
+        <div class="container header-container">
+            <a href="index.html" class="logo">For.My.<span>Events</span></a>
+            
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            
+            <ul class="nav-menu">
+                <li><a href="#services">Services</a></li>
+                <li><a href="#products">Nos Produits</a></li>
+                <li><a href="#about">À propos</a></li>
+                <li><a href="#showreel">Réalisations</a></li>
+                <li><a href="#reservation">Réservation</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">L'élégance au service de vos événements</h1>
+                <p class="hero-subtitle">Nous créons des moments inoubliables à travers une décoration raffinée et une organisation impeccable</p>
+                <div class="hero-btns">
+                    <a href="#products" class="btn btn-primary">Découvrir nos produits</a>
+                    <a href="#reservation" class="btn btn-outline">Demander un devis</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="section services">
+        <div class="container">
+            <h2 class="section-title">Nos Prestations</h2>
+            <p class="section-subtitle">Un service complet pour des événements réussis et sans stress</p>
+            
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-img">
+                        <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Décoration événementielle">
+                    </div>
+                    <div class="service-content">
+                        <h3 class="service-title">Décoration Sur Mesure</h3>
+                        <p class="service-desc">Nous concevons des décors uniques qui reflètent votre personnalité et créent l'atmosphère parfaite pour votre événement.</p>
+                        <div class="service-types">
+                            <span class="service-type">Mariage</span>
+                            <span class="service-type">Anniversaire</span>
+                            <span class="service-type">Baptême</span>
+                            <span class="service-type">Baby shower</span>
+                        </div>
+                        <a href="#reservation" class="btn btn-outline service-btn">En savoir plus</a>
+                    </div>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-img">
+                        <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Location de matériel">
+                    </div>
+                    <div class="service-content">
+                        <h3 class="service-title">Location de Matériel</h3>
+                        <p class="service-desc">Un large choix de matériel haut de gamme pour équiper votre événement : mobilier, vaisselle, décoration et accessoires.</p>
+                        <div class="service-types">
+                            <span class="service-type">Mobilier</span>
+                            <span class="service-type">Vaisselle</span>
+                            <span class="service-type">Décoration</span>
+                            <span class="service-type">Éclairage</span>
+                        </div>
+                        <a href="produits.html" class="btn btn-outline service-btn">Voir le catalogue</a>
+                    </div>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-img">
+                        <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Organisation complète">
+                    </div>
+                    <div class="service-content">
+                        <h3 class="service-title">Organisation Clé en Main</h3>
+                        <p class="service-desc">Nous prenons en charge tous les aspects de votre événement pour que vous puissiez profiter pleinement de chaque instant.</p>
+                        <div class="service-types">
+                            <span class="service-type">Planning</span>
+                            <span class="service-type">Coordination</span>
+                            <span class="service-type">Logistique</span>
+                            <span class="service-type">Sur mesure</span>
+                        </div>
+                        <a href="#reservation" class="btn btn-outline service-btn">En savoir plus</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Preview Section -->
+    <section id="products" class="section products-preview">
+        <div class="container">
+            <h2 class="section-title">Nos Produits à Louer</h2>
+            <p class="section-subtitle">Découvrez notre sélection de produits haut de gamme pour votre événement</p>
+            
+            <div class="products-highlight">
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Nappes rondes">
+                        <span class="product-badge">Nouveau</span>
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-title">Nappes Rondes</h3>
+                        <p class="product-price">À partir de 8€/pièce</p>
+                        <a href="produits.html#nappes" class="product-link">Voir les options <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1556911220-bff31c812dba?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Nappes rectangulaires">
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-title">Nappes Rectangulaires</h3>
+                        <p class="product-price">À partir de 10€/pièce</p>
+                        <a href="produits.html#nappes" class="product-link">Voir les options <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Vaisselle">
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-title">Vaisselle Élégante</h3>
+                        <p class="product-price">À partir de 2€/pièce</p>
+                        <a href="produits.html#vaisselle" class="product-link">Voir la collection <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Centres de table">
+                        <span class="product-badge">Populaire</span>
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-title">Centres de Table</h3>
+                        <p class="product-price">À partir de 15€/pièce</p>
+                        <a href="produits.html#centres" class="product-link">Voir les modèles <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="products-cta">
+                <a href="produits.html" class="btn btn-primary">Voir tout notre catalogue</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section about">
+        <div class="container">
+            <div class="about-container">
+                <div class="about-img">
+                    <img src="https://images.unsplash.com/photo-1527529482837-4698179dc6ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Équipe For.My.Events">
+                </div>
+                <div class="about-content">
+                    <h2 class="section-title">Notre Philosophie</h2>
+                    <p class="about-text">Depuis 2015, For.My.Events s'engage à transformer vos événements en expériences mémorables. Notre approche allie créativité, minutie et professionnalisme pour un résultat toujours à la hauteur de vos attentes.</p>
+                    <p class="about-text">Nous croyons que chaque occasion mérite d'être célébrée avec élégance et originalité. C'est pourquoi nous accordons une attention particulière à chaque détail, du premier échange jusqu'au jour J.</p>
+                    
+                    <ul class="about-features">
+                        <li>Plus de 300 événements organisés avec succès</li>
+                        <li>Une équipe de professionnels passionnés</li>
+                        <li>Matériel haut de gamme et régulièrement renouvelé</li>
+                        <li>Approche sur mesure pour chaque client</li>
+                        <li>Engagement qualité et respect des délais</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Showreel Section -->
+    <section id="showreel" class="section showreel">
+        <div class="container">
+            <h2 class="section-title">Nos Réalisations</h2>
+            <p class="section-subtitle">Quelques-unes de nos créations qui ont marqué nos clients</p>
+            
+            <div class="video-container">
+                <video autoplay loop muted playsinline>
+                    <source src="video1.mp4" type="video/mp4">
+                    Votre navigateur ne supporte pas la vidéo HTML5.
+                </video>
+            </div>
+            
+            <a href="realisations.html" class="btn btn-primary showreel-btn">Voir notre galerie complète</a>
+        </div>
+    </section>
+
+    <!-- Reservation Section -->
+    <section id="reservation" class="section reservation">
+        <div class="container">
+            <h2 class="section-title">Demande de Devis</h2>
+            <p class="section-subtitle">Parlez-nous de votre projet et nous vous recontacterons dans les plus brefs délais</p>
+            
+            <form class="reservation-form" id="devisForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="prenom">Prénom *</label>
+                        <input type="text" id="prenom" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="nom">Nom *</label>
+                        <input type="text" id="nom" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="telephone">Téléphone</label>
+                    <input type="tel" id="telephone" class="form-control">
+                </div>
+                
+                <div class="form-group">
+                    <label for="evenement">Type d'événement *</label>
+                    <select id="evenement" class="form-control" required>
+                        <option value="">-- Sélectionnez --</option>
+                        <option value="mariage">Mariage</option>
+                        <option value="bapteme">Baptême</option>
+                        <option value="anniversaire">Anniversaire</option>
+                        <option value="baby-shower">Baby shower</option>
+                        <option value="entreprise">Événement d'entreprise</option>
+                        <option value="autre">Autre</option>
+                    </select>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="date">Date de l'événement *</label>
+                        <input type="date" id="date" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lieu">Lieu de l'événement *</label>
+                        <input type="text" id="lieu" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="convives">Nombre de convives *</label>
+                        <input type="number" id="convives" class="form-control" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="materiel">Besoin de matériel ?</label>
+                        <select id="materiel" class="form-control">
+                            <option value="non">Non</option>
+                            <option value="tables-chaises">Tables et chaises</option>
+                            <option value="vaisselle">Vaisselle</option>
+                            <option value="complet">Package complet</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="theme">Thème souhaité</label>
+                    <input type="text" id="theme" class="form-control" placeholder="Ex: Bohème, Classique, Moderne...">
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Description de votre événement *</label>
+                    <textarea id="description" class="form-control" rows="5" required placeholder="Décrivez-nous votre projet, vos envies, vos couleurs préférées..."></textarea>
+                </div>
+                
+                <div class="form-submit">
+                    <button type="submit" class="btn btn-primary">Envoyer ma demande</button>
+                </div>
+                
+                <p class="form-note">Note importante : La vaisselle doit être rendue propre sinon le chèque de caution pourrait être encaissé. Merci de votre compréhension.</p>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-col footer-about">
+                    <h3>For.My.Events</h3>
+                    <p>Agence événementielle spécialisée dans la décoration et l'organisation d'événements ainsi que la location de matériel pour toutes occasions.</p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest-p"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Navigation</h3>
+                    <ul class="footer-links">
+                        <li><a href="#services">Nos services</a></li>
+                        <li><a href="produits.html">Nos produits</a></li>
+                        <li><a href="#about">À propos de nous</a></li>
+                        <li><a href="#showreel">Nos réalisations</a></li>
+                        <li><a href="#reservation">Demande de devis</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col footer-contact">
+                    <h3>Coordonnées</h3>
+                    <p><i class="fas fa-phone"></i> 07 83 03 23 95</p>
+                    <p><i class="fas fa-envelope"></i> contact@for.my.events</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Rue des Événements, 75000 Paris</p>
+                    <p><i class="fas fa-clock"></i> Lundi - Vendredi: 9h - 18h</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2023 For.My.Events. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Loader
+        window.addEventListener('load', function() {
+            const loader = document.querySelector('.loader');
+            setTimeout(function() {
+                loader.classList.add('hidden');
+            }, 1800);
+        });
+        
+        // Header scroll effect
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+        // Hamburger menu
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        
+        hamburger.addEventListener('click', function() {
+            this.classList.toggle('open');
+            navMenu.classList.toggle('active');
+            
+            // Toggle body scroll when menu is open
+            if (navMenu.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        });
+        
+        // Close menu when clicking on a link
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('open');
+                navMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Form submission
+        const devisForm = document.getElementById('devisForm');
+        if (devisForm) {
+            devisForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Here you would typically send the form data to a server
+                // For this example, we'll just show an alert
+                alert('Merci pour votre demande ! Nous vous contacterons très rapidement pour discuter de votre projet.');
+                this.reset();
+            });
+        }
+        
+        // Animation on scroll
+        const animateElements = () => {
+            const elements = document.querySelectorAll('.service-card, .about-img, .about-content, .video-container, .product-card');
+            const windowHeight = window.innerHeight;
+            
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const revealPoint = windowHeight * 0.75;
+                
+                if (elementPosition < revealPoint) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        };
+        
+        // Set initial state for animated elements
+        document.querySelectorAll('.service-card, .about-img, .about-content, .video-container, .product-card').forEach(element => {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(30px)';
+            element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        });
+        
+        window.addEventListener('scroll', animateElements);
+        window.addEventListener('load', animateElements);
+        
+        // Video autoplay and loop
+        document.addEventListener('DOMContentLoaded', function() {
+            const video = document.querySelector('.video-container video');
+            if (video) {
+                video.loop = true;
+                video.autoplay = true;
+                video.muted = true;
+                video.playsInline = true;
+                
+                // For mobile devices, we need to trigger play on user interaction
+                document.body.addEventListener('click', function firstInteraction() {
+                    video.play().catch(e => console.log('Autoplay prevented:', e));
+                    document.body.removeEventListener('click', firstInteraction);
+                }, { once: true });
+            }
+        });
+    </script>
+</body>
+</html>

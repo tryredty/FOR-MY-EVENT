@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalogue Produits - For.My.Events</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=Lora:wght@400;500&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* ---------- RESET & BASE STYLES ---------- */
+        :root {
+            --primary: #D97A74;
+            --primary-light: #e8a8a4;
+            --text-dark: #3A2C2B;
+            --text-medium: #5D4E4D;
+            --text-light: #FFFFFF;
+            --bg-light: #F9F4F3;
+            --accent: #C5A572;
+            --border-radius: 12px;
+            --box-shadow: 0 8px 24px rgba(58, 44, 43, 0.08);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-medium);
+            background-color: var(--bg-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            color: var(--text-dark);
+            font-weight: 500;
+            line-height: 1.3;
+        }
+        
+        p {
+            margin-bottom: 1.2rem;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        
+        .section {
+            padding: 100px 0;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent);
+            margin: 20px auto 40px;
+        }
+        
+        .section-subtitle {
+            font-family: 'Lora', serif;
+            font-size: 1.2rem;
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 60px;
+            color: var(--text-medium);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: var(--transition);
+            cursor: pointer;
+            text-align: center;
+            border: none;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--text-light);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--text-dark);
+            transform: translateY(-3px);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: var(--text-light);
+            transform: translateY(-3px);
+            box-shadow: var(--box-shadow);
+        }
+        
+        /* ---------- LOADER ---------- */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-light);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.6s ease-out;
+        }
+        
+        .loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .loader-content {
+            text-align: center;
+            transform: translateY(-50px);
+        }
+        
+        .loader-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(217, 122, 116, 0.2);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1.2s linear infinite;
+            margin: 0 auto 30px;
+        }
+        
+        .loader-logo {
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+        }
+        
+        .loader-message {
+            font-family: 'Lora', serif;
+            color: var(--text-medium);
+            font-size: 1.1rem;
+            max-width: 80%;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* ---------- HEADER ---------- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 24px 0;
+            background-color: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            transition: var(--transition);
+            border-bottom: 1px solid rgba(58, 44, 43, 0.08);
+        }
+        
+        header.scrolled {
+            padding: 16px 0;
+            box-shadow: 0 4px 12px rgba(58, 44, 43, 0.05);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 0.5px;
+        }
+        
+        .logo span {
+            color: var(--accent);
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-menu li {
+            margin-left: 40px;
+        }
+        
+        .nav-menu a {
+            font-weight: 500;
+            position: relative;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+        
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: var(--transition);
+        }
+        
+        .nav-menu a:hover {
+            color: var(--primary);
+        }
+        
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+        
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            width: 28px;
+            height: 20px;
+            position: relative;
+            z-index: 1001;
+        }
+        
+        .hamburger span {
+            display: block;
+            position: absolute;
+            height: 2px;
+            width: 100%;
+            background: var(--text-dark);
+            border-radius: 2px;
+            opacity: 1;
+            left: 0;
+            transform: rotate(0deg);
+            transition: var(--transition);
+        }
+        
+        .hamburger span:nth-child(1) {
+            top: 0;
+            transform-origin: left center;
+        }
+        
+        .hamburger span:nth-child(2) {
+            top: 8px;
+            transform-origin: left center;
+        }
+        
+        .hamburger span:nth-child(3) {
+            top: 16px;
+            transform-origin: left center;
+        }
+        
+        .hamburger.open span:nth-child(1) {
+            transform: rotate(45deg);
+            top: -2px;
+            left: 4px;
+        }
+        
+        .hamburger.open span:nth-child(2) {
+            width: 0%;
+            opacity: 0;
+        }
+        
+        .hamburger.open span:nth-child(3) {
+            transform: rotate(-45deg);
+            top: 18px;
+            left: 4px;
+        }
+        
+        /* ---------- CART ICON ---------- */
+        .cart-icon {
+            position: relative;
+            margin-left: 30px;
+            cursor: pointer;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--primary);
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+        
+        /* ---------- CART SIDEBAR ---------- */
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100%;
+            background-color: white;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            transition: right 0.3s ease;
+            padding: 30px;
+            overflow-y: auto;
+        }
+        
+        .cart-sidebar.active {
+            right: 0;
+        }
+        
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .cart-title {
+            font-size: 1.5rem;
+            color: var(--text-dark);
+        }
+        
+        .close-cart {
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .close-cart:hover {
+            color: var(--primary);
+        }
+        
+        .cart-items {
+            margin-bottom: 30px;
+        }
+        
+        .cart-item {
+            display: flex;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .cart-item-img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 15px;
+        }
+        
+        .cart-item-details {
+            flex: 1;
+        }
+        
+        .cart-item-title {
+            font-size: 1rem;
+            margin-bottom: 5px;
+            color: var(--text-dark);
+        }
+        
+        .cart-item-price {
+            font-size: 0.9rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+        }
+        
+        .cart-item-quantity button {
+            width: 25px;
+            height: 25px;
+            background-color: var(--bg-light);
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .cart-item-quantity button:hover {
+            background-color: var(--primary-light);
+            color: white;
+        }
+        
+        .cart-item-quantity input {
+            width: 40px;
+            height: 25px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+            margin: 0 5px;
+        }
+        
+        .remove-item {
+            color: #999;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .remove-item:hover {
+            color: var(--primary);
+        }
+        
+        .cart-total {
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: right;
+            margin-bottom: 30px;
+            color: var(--text-dark);
+        }
+        
+        .cart-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .cart-empty {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--text-medium);
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+        
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* ---------- PRODUCTS CATALOG ---------- */
+        .products-hero {
+            height: 60vh;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(rgba(58, 44, 43, 0.4), rgba(58, 44, 43, 0.4)), 
+                        url('https://images.unsplash.com/photo-1513151233558-d860c5398176?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            color: var(--text-light);
+            padding-top: 80px;
+            text-align: center;
+            margin-bottom: 80px;
+        }
+        
+        .products-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .products-hero-title {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .products-hero-subtitle {
+            font-family: 'Lora', serif;
+            font-size: 1.3rem;
+            opacity: 0.9;
+        }
+        
+        .products-catalog {
+            padding: 80px 0;
+            background-color: var(--bg-light);
+        }
+        
+        .category-section {
+            margin-bottom: 80px;
+            scroll-margin-top: 100px;
+        }
+        
+        .category-title {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(58, 44, 43, 0.1);
+            position: relative;
+        }
+        
+        .category-title::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100px;
+            height: 3px;
+            background-color: var(--primary);
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .product-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(58, 44, 43, 0.1);
+        }
+        
+        .product-img {
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        
+        .product-card:hover .product-img img {
+            transform: scale(1.05);
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--primary);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .product-content {
+            padding: 20px;
+        }
+        
+        .product-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+        
+        .product-desc {
+            color: var(--text-medium);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .product-price {
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: var(--text-medium);
+        }
+        
+        .product-cta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+        
+        .add-to-cart {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .add-to-cart:hover {
+            background-color: var(--text-dark);
+            transform: translateY(-2px);
+        }
+        
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+        }
+        
+        .quantity-selector button {
+            width: 30px;
+            height: 30px;
+            background-color: var(--bg-light);
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .quantity-selector button:hover {
+            background-color: var(--primary-light);
+            color: white;
+        }
+        
+        .quantity-selector input {
+            width: 40px;
+            height: 30px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+            margin: 0 5px;
+        }
+        
+        /* ---------- CATEGORY NAV ---------- */
+        .category-nav {
+            position: sticky;
+            top: 80px;
+            background-color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            z-index: 100;
+            margin-bottom: 40px;
+        }
+        
+        .category-nav-list {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            list-style: none;
+        }
+        
+        .category-nav-link {
+            padding: 8px 20px;
+            border-radius: 50px;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+        
+        .category-nav-link:hover, .category-nav-link.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        /* ---------- CTA SECTION ---------- */
+        .products-cta {
+            background-color: var(--primary);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .products-cta .container {
+            max-width: 800px;
+        }
+        
+        .products-cta-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: white;
+        }
+        
+        .products-cta-text {
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        /* ---------- FOOTER ---------- */
+        footer {
+            background-color: var(--text-dark);
+            color: var(--text-light);
+            padding: 80px 0 30px;
+        }
+        
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 60px;
+            margin-bottom: 60px;
+        }
+        
+        .footer-col h3 {
+            font-size: 1.4rem;
+            margin-bottom: 24px;
+            position: relative;
+            padding-bottom: 12px;
+            color: white;
+        }
+        
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--accent);
+        }
+        
+        .footer-about p {
+            margin-bottom: 24px;
+            opacity: 0.8;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+            list-style: none;
+            opacity: 0.8;
+            transition: var(--transition);
+        }
+        
+        .footer-links li:hover {
+            opacity: 1;
+        }
+        
+        .footer-links a {
+            transition: var(--transition);
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary-light);
+        }
+        
+        .footer-contact p {
+            margin-bottom: 16px;
+            display: flex;
+            align-items: flex-start;
+            opacity: 0.8;
+        }
+        
+        .footer-contact i {
+            margin-right: 12px;
+            color: var(--accent);
+            margin-top: 4px;
+        }
+        
+        .footer-social {
+            display: flex;
+            gap: 16px;
+            margin-top: 24px;
+        }
+        
+        .footer-social a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            background-color: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            transition: var(--transition);
+            font-size: 1.1rem;
+        }
+        
+        .footer-social a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.6;
+            font-size: 0.9rem;
+        }
+        
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 1024px) {
+            .section {
+                padding: 80px 0;
+            }
+            
+            .products-hero {
+                height: 50vh;
+                min-height: 400px;
+            }
+            
+            .cart-sidebar {
+                width: 350px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+            }
+            
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 280px;
+                height: 100vh;
+                background-color: white;
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: center;
+                padding: 0 40px;
+                transition: right 0.4s ease;
+                box-shadow: -5px 0 20px rgba(0, 0, 0, 0.08);
+            }
+            
+            .nav-menu.active {
+                right: 0;
+            }
+            
+            .nav-menu li {
+                margin: 16px 0;
+            }
+            
+            .category-nav {
+                top: 70px;
+            }
+            
+            .category-nav-list {
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding-bottom: 10px;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .category-nav-list::-webkit-scrollbar {
+                display: none;
+            }
+            
+            .products-hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .products-hero-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .cart-sidebar {
+                width: 100%;
+                max-width: 320px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .products-hero {
+                height: 40vh;
+                min-height: 300px;
+                margin-bottom: 50px;
+            }
+            
+            .products-hero-title {
+                font-size: 1.8rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .cart-item {
+                flex-direction: column;
+            }
+            
+            .cart-item-img {
+                width: 100%;
+                height: 120px;
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loader -->
+    <div class="loader">
+        <div class="loader-content">
+            <div class="loader-spinner"></div>
+            <div class="loader-logo">For.My.Events</div>
+            <p class="loader-message">Chargement de notre catalogue...</p>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header id="header">
+        <div class="container header-container">
+            <a href="index.html" class="logo">For.My.<span>Events</span></a>
+            
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            
+            <ul class="nav-menu">
+                <li><a href="index.html#services">Services</a></li>
+                <li><a href="produits.html">Nos Produits</a></li>
+                <li><a href="index.html#about">À propos</a></li>
+                <li><a href="index.html#showreel">Réalisations</a></li>
+                <li><a href="index.html#reservation">Réservation</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+                <li>
+                    <div class="cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar">
+        <div class="cart-header">
+            <h3 class="cart-title">Votre Panier</h3>
+            <i class="fas fa-times close-cart"></i>
+        </div>
+        <div class="cart-items">
+            <!-- Cart items will be added here dynamically -->
+            <div class="cart-empty">Votre panier est vide</div>
+        </div>
+        <div class="cart-total">Total: 0€</div>
+        <div class="cart-actions">
+            <button class="btn btn-primary" id="checkout-btn">Passer la commande</button>
+            <button class="btn btn-outline" id="continue-shopping">Continuer mes achats</button>
+        </div>
+    </div>
+    <div class="overlay"></div>
+
+    <!-- Products Hero -->
+    <section class="products-hero">
+        <div class="container">
+            <div class="products-hero-content">
+                <h1 class="products-hero-title">Notre Catalogue de Location</h1>
+                <p class="products-hero-subtitle">Découvrez notre sélection de produits haut de gamme pour votre événement</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Category Navigation -->
+    <div class="category-nav">
+        <div class="container">
+            <ul class="category-nav-list">
+                <li><a href="#nappes" class="category-nav-link active">Nappes</a></li>
+                <li><a href="#vaisselle" class="category-nav-link">Vaisselle</a></li>
+                <li><a href="#centres" class="category-nav-link">Centres de table</a></li>
+                <li><a href="#mariage" class="category-nav-link">Coin mariage</a></li>
+                <li><a href="#serviettes" class="category-nav-link">Serviettes</a></li>
+                <li><a href="#divers" class="category-nav-link">Divers</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Products Catalog -->
+    <section class="products-catalog">
+        <div class="container">
+            <!-- Nappes Section -->
+            <div id="nappes" class="category-section">
+                <h2 class="category-title">Nappes</h2>
+                
+                <div class="products-grid">
+                    <!-- Product 1 -->
+                    <div class="product-card">
+                        <div class="product-img">
+                            <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Nappe ronde blanche">
+                            <span class="product-badge">Nouveau</span>
+                        </div>
+                        <div class="product-content">
+                            <h3 class="product-title">Nappe Ronde Blanche</h3>
+                            <p class="product-desc">Nappe ronde en satin 180g/m², diamètre 2m20, tissu résistant et facile à entretenir.</p>
+                            <p class="product-price">8€ /pièce</p>
+                            <div class="product-meta">
+                                <span>Disponible: 25</span>
+                                <span>Réf: NR-BL-220</span>
+                            </div>
+                            <div class="product-cta">
+                                <div class="quantity-selector">
+                                    <button class="minus">-</button>
+                                    <input type="number" value="1" min="1" max="25">
+                                    <button class="plus">+</button>
+                                </div>
+                                <button class="add-to-cart" data-id="1" data-name="Nappe Ronde Blanche" data-price="8" data-image="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80">Ajouter au panier</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product 2 -->
+                    <div class="product-card">
+                        <div class="product-img">
+                            <img src="https://images.unsplash.com/photo-1556911220-bff31c812dba?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Nappe rectangulaire ivoire">
+                        </div>
+                        <div class="product-content">
+                            <h3 class="product-title">Nappe Rectangulaire Ivoire</h3>
+                            <p class="product-desc">Nappe rectangulaire en polyester 160x220cm, couleur ivoire, tissu infroissable.</p>
+                            <p class="product-price">10€ /pièce</p>
+                            <div class="product-meta">
+                                <span>Disponible: 18</span>
+                                <span>Réf: NR-IV-160</span>
+                            </div>
+                            <div class="product-cta">
+                                <div class="quantity-selector">
+                                    <button class="minus">-</button>
+                                    <input type="number" value="1" min="1" max="18">
+                                    <button class="plus">+</button>
+                                </div>
+                                <button class="add-to-cart" data-id="2" data-name="Nappe Rectangulaire Ivoire" data-price="10" data-image="https://images.unsplash.com/photo-1556911220-bff31c812dba?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80">Ajouter au panier</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product 3 -->
+                    <div class="product-card">
+                        <div class="product-img">
+                            <img src="https://images.unsplash.com/photo-1596728325488-58e00c873fdf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Nappe carrée bordeaux">
+                        </div>
+                        <div class="product-content">
+                            <h3 class="product-title">Nappe Carrée Bordeaux</h3>
+                            <p class="product-desc">Nappe carrée 150x150cm en velours, couleur bordeaux profond, idéale pour les événements d'hiver.</p>
+                            <p class="product-price">12€ /pièce</p>
+                            <div class="product-meta">
+                                <span>Disponible: 15</span>
+                                <span>Réf: NC-BO-150</span>
+                            </div>
+                            <div class="product-cta">
+                                <div class="quantity-selector">
+                                    <button class="minus">-</button>
+                                    <input type="number" value="1" min="1" max="15">
+                                    <button class="plus">+</button>
+                                </div>
+                                <button class="add-to-cart" data-id="3" data-name="Nappe Carrée Bordeaux" data-price="12" data-image="https://images.unsplash.com/photo-1596728325488-58e00c873fdf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80">Ajouter au panier</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Vaisselle Section -->
+            <div id="vaisselle" class="category-section">
+                <h2 class="category-title">Vaisselle</h2>
+                
+                <div class="products-grid">
+                    <!-- Product 4 -->
+                    <div class="product-card">
+                        <div class="product-img">
+                            <img src="https://images.unsplash.com/photo-1596728325488-58e00c873fdf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Assiette plate blanche">
+                            <span class="product-badge">Best-seller</span>
+                        </div>
+                        <div class="product-content">
+                            <h3 class="product-title">Assiette Plate Blanche</h3>
+                            <p class="product-desc">Assiette plate en porcelaine blanche, diamètre 26cm, design épuré et élégant.</p>
+                            <p class="product-price">3€ /pièce</p>
+                            <div class="product-meta">
+                                <span>Disponible: 120</span>
+                                <span>Réf: AP-BL-26</span>
+                            </div>
+                            <div class="product-cta">
+                                <div class="quantity-selector">
+                                    <button class="minus">-</button>
+                                    <input type="number" value="1" min="1" max="120">
+                                    <button class="plus">+</button>
+                                </div>
+                                <button class="add-to-cart" data-id="4" data-name="Assiette Plate Blanche" data-price="3" data-image="https://images.unsplash.com/photo-1596728325488-58e00c873fdf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80">Ajouter au panier</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product 5 -->
+                    <div class="product-card">
+                        <div class="product-img">
+                            <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Verre à vin transparent">
+                        </div>
+                        <div class="product-content">
+                            <h3 class="product-title">Verre à Vin Transparent</h3>
+                            <p class="product-desc">Verre à vin en cristal transparent, contenance 35cl, fabrication artisanale.</p>
+                            <p class="product-price">2.50€ /pièce</p>
+                            <div class="product-meta">
+                                <span>Disponible: 80</span>
+                                <span>Réf: VV-TR-35</span>
+                            </div>
+                            <div class="product-cta">
+                                <div class="quantity-selector">
+                                    <button class="minus">-</button>
+                                    <input type="number" value="1" min="1" max="80">
+                                    <button class="plus">+</button>
+                                </div>
+                                <button class="add-to-cart" data-id="5" data-name="Verre à Vin Transparent" data-price="2.5" data-image="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80">Ajouter au panier</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product 6 -->
+                    <div class="product-card">
+                        <div class="product-img">
+                            <img src="https://images.unsplash.com/photo-1556911220-bff31c812dba?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Couvert argenté">
+                        </div>
+                        <div class="product-content">
+                            <h3 class="product-title">Couvert Argenté</h3>
+                            <p class="product-desc">Service de couvert en acier inoxydable, finition argentée brillante, 24 pièces par set.</p>
+                            <p class="product-price">15€ /set</p>
+                            <div class="product-meta">
+                                <span>Disponible: 30</span>
+                                <span>Réf: SC-AR-24</span>
+                            </div>
+                            <div class="product-cta">
+                                <div class="quantity-selector">
+                                    <button class="minus">-</button>
+                                    <input type="number" value="1" min="1" max="30">
+                                    <button class="plus">+</button>
+                                </div>
+                                <button class="add-to-cart" data-id="6" data-name="Couvert Argenté" data-price="15" data-image="https://images.unsplash.com/photo-1556911220-bff31c812dba?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80">Ajouter au panier</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Centres de table Section -->
+            <div id="centres" class="category-section">
+                <h2 class="category-title">Centres de table</h2>
+                
+                <div class="products-grid">
+                    <!-- Product 7 -->
+                    <div class="product-card">
+                        <div class="product-img">
+                            <img src="https://images.unsplash.com/photo-1556911220-bff31c812dba?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Vase cylindrique transparent">
+                        </div>
+                        <div class="product-content">
+                            <h3 class="product-title">Vase Cylindrique Transparent</h3>
+                            <p class="product-desc">Vase en verre transparent, hauteur 30cm, diamètre 15cm, idéal pour compositions florales.</p>
+                            <p class="product-price">18€ /pièce</p>
+                            <div class="product-meta">
+                                <span>Disponible: 20</span>
+                                <span>Réf: VC-TR-30</span>
+                            </div>
+                            <div class="product-cta">
+                                <div class="quantity-selector">
+                                    <button class="minus">-</button>
+                                    <input type="number" value="1" min="1" max="20">
+                                    <button class="plus">+</button>
+                                </div>
+                                <button class="add-to-cart" data-id="7" data-name="Vase Cylindrique Transparent" data-price="18" data-image="https://images.unsplash.com/photo-1556911220-bff31c812dba?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80">Ajouter au panier</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product 8 -->
+                    <div class="product-card">
+                        <div class="product-img">
+                            <img src="https://images.unsplash.com/photo-1596728325488-58e00c873fdf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Bougeoir doré">
+                            <span class="product-badge">Nouveau</span>
+                        </div>
+                        <div class="product-content">
+                            <h3 class="product-title">Bougeoir Doré</h3>
+                            <p class="product-desc">Bougeoir en métal doré, hauteur 25cm, style moderne et élégant pour vos tables.</p>
+                            <p class="product-price">22€ /pièce</p>
+                            <div class="product-meta">
+                                <span>Disponible: 15</span>
+                                <span>Réf: BG-DO-25</span>
+                            </div>
+                            <div class="product-cta">
+                                <div class="quantity-selector">
+                                    <button class="minus">-</button>
+                                    <input type="number" value="1" min="1" max="15">
+                                    <button class="plus">+</button>
+                                </div>
+                                <button class="add-to-cart" data-id="8" data-name="Bougeoir Doré" data-price="22" data-image="https://images.unsplash.com/photo-1596728325488-58e00c873fdf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80">Ajouter au panier</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product 9 -->
+                    <div class="product-card">
+                        <div class="product-img">
+                            <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Composition florale printanière">
+                        </div>
+                        <div class="product-content">
+                            <h3 class="product-title">Composition Florale Printanière</h3>
+                            <p class="product-desc">Composition florale sur plateau, diamètre 40cm, fleurs saisonnières renouvelées chaque semaine.</p>
+                            <p class="product-price">45€ /pièce</p>
+                            <div class="product-meta">
+                                <span>Disponible: 10</span>
+                                <span>Réf: CF-PR-40</span>
+                            </div>
+                            <div class="product-cta">
+                                <div class="quantity-selector">
+                                    <button class="minus">-</button>
+                                    <input type="number" value="1" min="1" max="10">
+                                    <button class="plus">+</button>
+                                </div>
+                                <button class="add-to-cart" data-id="9" data-name="Composition Florale Printanière" data-price="45" data-image="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80">Ajouter au panier</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Coin mariage Section -->
+            <div id="mariage" class="category-section">
+                <h2 class="category-title">Coin mariage</h2>
+                
+                <div class="products-grid">
+                    <!-- Product 10 -->
+                    <div class="product-card">
+                        <div class="product-img">
+                            <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Arche de mariage blanche">
+                            <span class="product-badge">Populaire</span>
+                        </div>
+                        <div class="product-content">
+                            <h3 class="product-title">Arche de Mariage Blanche</h3>
+                            <p class="product-desc">Arche en bois peinte en blanc, dimensions 2.5m x 2m, décoration florale non incluse.</p>
+                            <p class="product-price">120€ /jour</p>
+                            <div class="product-meta">
+                                <span>Disponible: 5</span>
+                                <span>Réf: AM-BL-250</span>
+                            </div>
+                            <div class="product-cta">
+                                <div class="quantity-selector">
+                                    <button class="minus">-</button>
+                                    <input type="number" value="1" min="1" max="5">
+                                    <button class="plus">+</button>
+                                </div>
+                                <button class="add-to-cart" data-id="10" data-name="Arche de Mariage Blanche" data-price="120" data-image="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80">Ajouter au panier</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product 11 -->
+                    <div class="product-card">
+                        <div class="product-img">
+                            <img src="https://images.unsplash.com/photo-1556911220-bff31c812dba?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Fauteuil cérémonie doré">
+                        </div>
+                        <div class="product-content">
+                            <h3 class="product-title">Fauteuil Cérémonie Doré</h3>
+                            <p class="product-desc">Fauteuil cérémonie en métal doré, dossier haut, housse blanche incluse.</p>
+                            <p class="product-price">25€ /pièce</p>
+                            <div class="product-meta">
+                                <span>Disponible: 12</span>
+                                <span>Réf: FC-DO-01</span>
+                            </div>
+                            <div class="product-cta">
+                                <div class="quantity-selector">
+                                    <button class="minus">-</button>
+                                    <input type="number" value="1" min="1" max="12">
+                                    <button class="plus">+</button>
+                                </div>
+                                <button class="add-to-cart" data-id="11" data-name="Fauteuil Cérémonie Doré" data-price="25" data-image="https://images.unsplash.com/photo-1556911220-bff31c812dba?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80">Ajouter au panier</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product 12 -->
+                    <div class="product-card">
+                        <div class="product-img">
+                            <img src="https://images.unsplash.com/photo-1596728325488-58e00c873fdf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Table de cadeaux">
+                        </div>
+                        <div class="product-content">
+                            <h3 class="product-title">Table de Cadeaux</h3>
+                            <p class="product-desc">Table ronde diamètre 90cm, pied central, nappe blanche et coffret cadeau inclus.</p>
+                            <p class="product-price">50€ /jour</p>
+                            <div class="product-meta">
+                                <span>Disponible: 8</span>
+                                <span>Réf: TC-RD-90</span>
+                            </div>
+                            <div class="product-cta">
+                                <div class="quantity-selector">
+                                    <button class="minus">-</button>
+                                    <input type="number" value="1" min="1" max="8">
+                                    <button class="plus">+</button>
+                                </div>
+                                <button class="add-to-cart" data-id="12" data-name="Table de Cadeaux" data-price="50" data-image="https://images.unsplash.com/photo-1596728325488-58e00c873fdf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80">Ajouter au panier</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="products-cta">
+        <div class="container">
+            <h2 class="products-cta-title">Prêt à organiser votre événement ?</h2>
+            <p class="products-cta-text">Nos conseillers sont à votre disposition pour vous aider à choisir les produits parfaits pour votre occasion spéciale.</p>
+            <a href="index.html#contact" class="btn btn-outline">Contactez-nous</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-col footer-about">
+                    <h3>For.My.Events</h3>
+                    <p>Spécialistes en location de matériel pour événements depuis 2010. Nous mettons à votre disposition notre savoir-faire et notre matériel haut de gamme.</p>
+                    <div class="footer-social">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Liens utiles</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="produits.html">Nos produits</a></li>
+                        <li><a href="index.html#services">Services</a></li>
+                        <li><a href="index.html#showreel">Réalisations</a></li>
+                        <li><a href="index.html#reservation">Réservation</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Contact</h3>
+                    <div class="footer-contact">
+                        <p><i class="fas fa-map-marker-alt"></i> 123 Rue des Événements, 75000 Paris</p>
+                        <p><i class="fas fa-phone-alt"></i> +33 1 23 45 67 89</p>
+                        <p><i class="fas fa-envelope"></i> contact@formyevents.com</p>
+                        <p><i class="fas fa-clock"></i> Lun-Ven: 9h-18h / Sam: 10h-15h</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2023 For.My.Events. Tous droits réservés. | <a href="#">Mentions légales</a> | <a href="#">Politique de confidentialité</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Loader
+        window.addEventListener('load', function() {
+            const loader = document.querySelector('.loader');
+            loader.classList.add('hidden');
+        });
+
+        // Mobile Menu Toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        
+        hamburger.addEventListener('click', function() {
+            this.classList.toggle('open');
+            navMenu.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('open');
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Category navigation active state
+        const categoryLinks = document.querySelectorAll('.category-nav-link');
+        
+        categoryLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                
+                // Remove active class from all links
+                categoryLinks.forEach(l => l.classList.remove('active'));
+                
+                // Add active class to clicked link
+                this.classList.add('active');
+                
+                // Scroll to section
+                window.scrollTo({
+                    top: targetSection.offsetTop - 120,
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Update active link based on scroll position
+        const categorySections = document.querySelectorAll('.category-section');
+        
+        window.addEventListener('scroll', function() {
+            let current = '';
+            
+            categorySections.forEach(section => {
+                const sectionTop = section.offsetTop - 150;
+                const sectionHeight = section.offsetHeight;
+                
+                if (pageYOffset >= sectionTop && pageYOffset < sectionTop + sectionHeight) {
+                    current = '#' + section.getAttribute('id');
+                }
+            });
+            
+            categoryLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Quantity selector
+        document.querySelectorAll('.quantity-selector').forEach(selector => {
+            const minus = selector.querySelector('.minus');
+            const plus = selector.querySelector('.plus');
+            const input = selector.querySelector('input');
+            
+            minus.addEventListener('click', () => {
+                let value = parseInt(input.value);
+                if (value > parseInt(input.min)) {
+                    input.value = value - 1;
+                }
+            });
+            
+            plus.addEventListener('click', () => {
+                let value = parseInt(input.value);
+                if (value < parseInt(input.max)) {
+                    input.value = value + 1;
+                }
+            });
+            
+            input.addEventListener('change', () => {
+                let value = parseInt(input.value);
+                if (isNaN(value) || value < parseInt(input.min)) {
+                    input.value = input.min;
+                } else if (value > parseInt(input.max)) {
+                    input.value = input.max;
+                }
+            });
+        });
+
+        // Cart functionality
+        const cartIcon = document.querySelector('.cart-icon');
+        const cartSidebar = document.querySelector('.cart-sidebar');
+        const closeCart = document.querySelector('.close-cart');
+        const overlay = document.querySelector('.overlay');
+        const cartItemsContainer = document.querySelector('.cart-items');
+        const cartTotal = document.querySelector('.cart-total');
+        const cartCount = document.querySelector('.cart-count');
+        const continueShopping = document.querySelector('#continue-shopping');
+        const checkoutBtn = document.querySelector('#checkout-btn');
+        
+        let cart = [];
+        
+        // Toggle cart sidebar
+        cartIcon.addEventListener('click', toggleCart);
+        closeCart.addEventListener('click', toggleCart);
+        overlay.addEventListener('click', toggleCart);
+        continueShopping.addEventListener('click', toggleCart);
+        
+        function toggleCart() {
+            cartSidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = cartSidebar.classList.contains('active') ? 'hidden' : 'auto';
+        }
+        
+        // Add to cart
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', function() {
+                const productCard = this.closest('.product-card');
+                const productId = this.getAttribute('data-id');
+                const productName = this.getAttribute('data-name');
+                const productPrice = parseFloat(this.getAttribute('data-price'));
+                const productImage = this.getAttribute('data-image');
+                const quantity = parseInt(productCard.querySelector('.quantity-selector input').value);
+                
+                addToCart(productId, productName, productPrice, productImage, quantity);
+                
+                // Show cart sidebar
+                if (!cartSidebar.classList.contains('active')) {
+                    toggleCart();
+                }
+            });
+        });
+        
+        function addToCart(id, name, price, image, quantity) {
+            // Check if product already in cart
+            const existingItem = cart.find(item => item.id === id);
+            
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({
+                    id,
+                    name,
+                    price,
+                    image,
+                    quantity
+                });
+            }
+            
+            updateCart();
+        }
+        
+        function updateCart() {
+            // Update cart items display
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<div class="cart-empty">Votre panier est vide</div>';
+            } else {
+                cartItemsContainer.innerHTML = '';
+                
+                cart.forEach(item => {
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'cart-item';
+                    cartItem.innerHTML = `
+                        <img src="${item.image}" alt="${item.name}" class="cart-item-img">
+                        <div class="cart-item-details">
+                            <h4 class="cart-item-title">${item.name}</h4>
+                            <p class="cart-item-price">${item.price}€ /pièce</p>
+                            <div class="cart-item-quantity">
+                                <button class="decrease" data-id="${item.id}">-</button>
+                                <input type="number" value="${item.quantity}" min="1">
+                                <button class="increase" data-id="${item.id}">+</button>
+                            </div>
+                            <p class="remove-item" data-id="${item.id}">Supprimer</p>
+                        </div>
+                    `;
+                    cartItemsContainer.appendChild(cartItem);
+                });
+                
+                // Add event listeners to quantity buttons
+                document.querySelectorAll('.decrease').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const id = this.getAttribute('data-id');
+                        const item = cart.find(item => item.id === id);
+                        
+                        if (item.quantity > 1) {
+                            item.quantity--;
+                            updateCart();
+                        }
+                    });
+                });
+                
+                document.querySelectorAll('.increase').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const id = this.getAttribute('data-id');
+                        const item = cart.find(item => item.id === id);
+                        item.quantity++;
+                        updateCart();
+                    });
+                });
+                
+                document.querySelectorAll('.remove-item').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const id = this.getAttribute('data-id');
+                        cart = cart.filter(item => item.id !== id);
+                        updateCart();
+                    });
+                });
+            }
+            
+            // Update cart total
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            cartTotal.textContent = `Total: ${total.toFixed(2)}€`;
+            
+            // Update cart count
+            const itemCount = cart.reduce((count, item) => count + item.quantity, 0);
+            cartCount.textContent = itemCount;
+            cartCount.style.display = itemCount > 0 ? 'flex' : 'none';
+        }
+        
+        // Checkout button
+        checkoutBtn.addEventListener('click', function() {
+            if (cart.length > 0) {
+                // Here you would typically redirect to checkout page
+                // For this example, we'll just show an alert
+                alert('Redirection vers la page de paiement...');
+                // window.location.href = 'checkout.html';
+            } else {
+                alert('Votre panier est vide');
+            }
+        });
+    </script>
+</body>
+</html>
